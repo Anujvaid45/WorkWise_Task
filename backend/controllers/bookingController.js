@@ -91,8 +91,6 @@ const cancelBooking = async (req, res) => {
         if (booking.rows.length === 0) {
             throw new Error('Booking not found');
         }
-        
-        // Delete associated rows in booking_seats
 
         // Update seats to available
         await client.query(
@@ -102,14 +100,11 @@ const cancelBooking = async (req, res) => {
              )`,
             [req.params.id]
         );
+        // Delete associated rows in booking_seats
         await client.query(
             'DELETE FROM booking_seats WHERE booking_id = $1',
             [req.params.id]
         );
-        
-        
-        // // Delete booking
-        // await client.query('DELETE FROM bookings WHERE id = $1', [req.params.id]);
         
         await client.query('COMMIT');
         res.json({ message: 'Booking cancelled successfully' });
