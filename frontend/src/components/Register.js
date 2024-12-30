@@ -122,7 +122,7 @@ const Register = () => {
                                     type="password"
                                     required
                                     className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 outline-none"
-                                    placeholder="Create a password"
+                                    placeholder="Create a password(minimum 6 characters)"
                                     value={formData.password}
                                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                 />
