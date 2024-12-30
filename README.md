@@ -35,3 +35,19 @@
 3. **Run the frontend development server:**
    ```bash
    npm run start
+
+## Using the Website
+
+### Register:
+- Navigate to the registration page.
+- Provide the required credentials (username, email, password, etc.).
+- Submit the form to create an account.
+
+### Login:
+- Once registered, log in using your credentials.
+
+### Book Seats:
+- After logging in, navigate to the seat booking page.
+- Choose the desired number of seats and confirm your booking.
+
+The system will handle seat availability, ensuring you can only book available seats.
