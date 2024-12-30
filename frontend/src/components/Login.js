@@ -10,28 +10,18 @@ const Login = () => {
     const navigate = useNavigate();
     const { login } = useAuth();
 
-    const validateEmail = (email) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    };
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
 
-    const validatePassword = (password) => {
-        return password.length >= 8; // Adjust rules as needed
+        // Sanitize input (remove leading/trailing spaces and replace multiple spaces with a single space)
+        setCredentials((prev) => ({
+            ...prev,
+            [name]: value.trim().replace(/\s+/g, ' '),
+        }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        // Input validation
-        if (!validateEmail(credentials.email)) {
-            setError('Please enter a valid email address.');
-            return;
-        }
-
-        if (!validatePassword(credentials.password)) {
-            setError('Password must be at least 8 characters long.');
-            return;
-        }
 
         setIsLoading(true);
         setError(''); // Clear previous errors
@@ -45,13 +35,6 @@ const Login = () => {
         } finally {
             setIsLoading(false);
         }
-    };
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-
-        // Sanitize input (remove leading/trailing spaces)
-        setCredentials((prev) => ({ ...prev, [name]: value.trim() }));
     };
 
     return (
