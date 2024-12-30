@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import validator from 'validator'; // For validating inputs
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -15,10 +16,33 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Validate inputs
+        if (!formData.username || !formData.email || !formData.password || !formData.confirmPassword) {
+            setError('All fields are required');
+            return;
+        }
+
+        // Email validation
+        if (!validator.isEmail(formData.email)) {
+            setError('Please enter a valid email address');
+            return;
+        }
+
+        // Password validation (min 6 characters)
+        if (formData.password.length < 6) {
+            setError('Password must be at least 6 characters long');
+            return;
+        }
+
+        // Confirm password validation
         if (formData.password !== formData.confirmPassword) {
             setError('Passwords do not match');
             return;
         }
+
+        // Clear previous error
+        setError('');
 
         setIsLoading(true);
         try {

@@ -46,12 +46,13 @@ const SeatBooking = () => {
 
         let seatsToSelect = [];
 
-        // Group seats by rows
+        // Group seats by rows to facilitate easier seat selection
         const seatsByRow = groupSeatsByRow(seats);
+
+        // Try to select enough available seats in the same row
         for (let rowNumber in seatsByRow) {
             const availableSeats = seatsByRow[rowNumber].filter(seat => !seat.is_booked);
 
-            // If enough available seats are in the same row, select them
             if (availableSeats.length >= seatsToBook) {
                 seatsToSelect = availableSeats.slice(0, seatsToBook);
                 break;
@@ -59,11 +60,11 @@ const SeatBooking = () => {
         }
 
         if (seatsToSelect.length === 0) {
-            // If not enough seats in the same row, find nearby seats
+            // If not enough seats are available in the same row, find nearby seats
             let nearbySeats = [];
             let remainingSeats = seatsToBook;
 
-            // Search for available seats in consecutive rows
+            // Search for available seats across consecutive rows
             for (let rowNumber in seatsByRow) {
                 const availableSeats = seatsByRow[rowNumber].filter(seat => !seat.is_booked);
                 nearbySeats = [...nearbySeats, ...availableSeats];
@@ -71,7 +72,7 @@ const SeatBooking = () => {
                 if (remainingSeats <= 0) break;
             }
 
-            // If we found enough nearby seats, book them
+            // If enough nearby seats are found, select them
             if (nearbySeats.length >= seatsToBook) {
                 seatsToSelect = nearbySeats.slice(0, seatsToBook);
             } else {
@@ -118,7 +119,6 @@ const SeatBooking = () => {
         }, {});
     };
 
-
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
             <div className="max-w-6xl mx-auto px-4">
@@ -152,15 +152,10 @@ const SeatBooking = () => {
                                     key={seat.id}
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
-                                    className={`
-                                        relative group cursor-pointer rounded-lg overflow-hidden shadow-sm
+                                    className={`relative group cursor-pointer rounded-lg overflow-hidden shadow-sm
                                         ${seat.is_booked 
                                             ? 'bg-gradient-to-br from-red-500 to-red-600' 
-                                            : 'bg-gradient-to-br from-green-500 to-green-600'}
-                                        ${selectedSeats.includes(seat.id) 
-                                            ? 'ring-2 ring-yellow-400 ring-opacity-50' 
-                                            : ''}
-                                    `}
+                                            : 'bg-gradient-to-br from-green-500 to-green-600'}`}
                                     onClick={() => {
                                         if (!seat.is_booked) {
                                             setSelectedSeats(prev => {
@@ -179,22 +174,6 @@ const SeatBooking = () => {
                                     </div>
                                 </motion.div>
                             ))}
-                        </div>
-                        <div className="flex justify-center">
-                            <div className="flex space-x-4 text-xs">
-                                <div className="flex items-center">
-                                    <div className="w-3 h-3 rounded-full bg-gradient-to-br from-green-500 to-green-600 mr-1"></div>
-                                    <span className="text-gray-600">Available</span>
-                                </div>
-                                <div className="flex items-center">
-                                    <div className="w-3 h-3 rounded-full bg-gradient-to-br from-red-500 to-red-600 mr-1"></div>
-                                    <span className="text-gray-600">Booked</span>
-                                </div>
-                                <div className="flex items-center">
-                                    <div className="w-3 h-3 rounded-full ring-2 ring-yellow-400 ring-opacity-50 mr-1"></div>
-                                    <span className="text-gray-600">Selected</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -252,10 +231,9 @@ const SeatBooking = () => {
                                     </div>
                                     <button
                                         onClick={() => handleCancelBooking(booking.id)}
-                                        className="px-3 py-1.5 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg
-                                                hover:from-red-700 hover:to-red-800 transform hover:scale-105 transition-all duration-200"
+                                        className="px-3 py-1.5 bg-gradient-to-r from-red-600 to-red-700 text-white text-sm rounded-lg hover:scale-105 transform transition-all duration-200"
                                     >
-                                        Cancel
+                                        Cancel Booking
                                     </button>
                                 </div>
                             ))}
