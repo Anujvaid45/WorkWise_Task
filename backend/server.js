@@ -7,7 +7,15 @@ const bookingRoutes = require('./routes/bookingRoutes');
 
 const app = express();
 
-app.use(cors());
+const corsOptions = {
+    origin: 'https://work-wise-task.vercel.app', // Your frontend's URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+    credentials: true, // Allow cookies/credentials if needed
+};
+
+app.use(cors(corsOptions));
+
 app.use(express.json());
 
 // Use routes
