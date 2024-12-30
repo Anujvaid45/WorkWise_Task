@@ -10,9 +10,32 @@ const Login = () => {
     const navigate = useNavigate();
     const { login } = useAuth();
 
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const validatePassword = (password) => {
+        return password.length >= 8; // Adjust rules as needed
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Input validation
+        if (!validateEmail(credentials.email)) {
+            setError('Please enter a valid email address.');
+            return;
+        }
+
+        if (!validatePassword(credentials.password)) {
+            setError('Password must be at least 8 characters long.');
+            return;
+        }
+
         setIsLoading(true);
+        setError(''); // Clear previous errors
+
         try {
             const response = await axios.post('https://workwise-task-g8sm.onrender.com/api/login', credentials);
             login(response.data.token, response.data.user);
@@ -24,28 +47,28 @@ const Login = () => {
         }
     };
 
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+
+        // Sanitize input (remove leading/trailing spaces)
+        setCredentials((prev) => ({ ...prev, [name]: value.trim() }));
+    };
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-purple-50 to-blue-100">
             <div className="relative w-full max-w-md px-6 py-12 bg-white/80 backdrop-blur-md rounded-2xl shadow-xl transform transition-all duration-300 hover:shadow-2xl mx-4">
-                {/* Decorative Elements */}
-                <div className="absolute -top-6 -left-6 w-24 h-24 bg-indigo-600/10 rounded-full blur-2xl"></div>
-                <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-purple-600/10 rounded-full blur-2xl"></div>
-
                 <div className="relative z-10">
-                    {/* Header */}
                     <div className="text-center mb-12">
                         <h2 className="text-4xl font-bold text-gray-900 mb-2">Welcome Back</h2>
                         <p className="text-gray-600">Sign in to continue your journey</p>
                     </div>
 
-                    {/* Error Message */}
                     {error && (
                         <div className="mb-6 p-4 rounded-lg bg-red-50 border-l-4 border-red-500">
                             <p className="text-red-700 text-sm font-medium">{error}</p>
                         </div>
                     )}
 
-                    {/* Login Form */}
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="space-y-4">
                             <div>
@@ -54,12 +77,13 @@ const Login = () => {
                                 </label>
                                 <input
                                     id="email"
+                                    name="email"
                                     type="email"
                                     required
                                     className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 outline-none"
                                     placeholder="Enter your email"
                                     value={credentials.email}
-                                    onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
+                                    onChange={handleInputChange}
                                 />
                             </div>
                             <div>
@@ -68,30 +92,15 @@ const Login = () => {
                                 </label>
                                 <input
                                     id="password"
+                                    name="password"
                                     type="password"
                                     required
                                     className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 outline-none"
                                     placeholder="Enter your password"
                                     value={credentials.password}
-                                    onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
+                                    onChange={handleInputChange}
                                 />
                             </div>
-                        </div>
-
-                        <div className="mt-2 flex items-center justify-between">
-                            <div className="flex items-center">
-                                <input
-                                    id="remember-me"
-                                    type="checkbox"
-                                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded cursor-pointer"
-                                />
-                                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700 cursor-pointer">
-                                    Remember me
-                                </label>
-                            </div>
-                            <button type="button" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
-                                Forgot password?
-                            </button>
                         </div>
 
                         <button
@@ -108,19 +117,6 @@ const Login = () => {
                                 'Sign in'
                             )}
                         </button>
-
-                        <div className="text-center mt-4">
-                            <p className="text-sm text-gray-600">
-                                Don't have an account?{' '}
-                                <button 
-                                    type="button"
-                                    onClick={() => navigate('/register')} 
-                                    className="font-medium text-indigo-600 hover:text-indigo-500"
-                                >
-                                    Sign up
-                                </button>
-                            </p>
-                        </div>
                     </form>
                 </div>
             </div>
