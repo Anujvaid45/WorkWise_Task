@@ -22,7 +22,7 @@ const Register = () => {
 
         setIsLoading(true);
         try {
-            await axios.post('http://localhost:5000/api/register', {
+            await axios.post('https://workwise-task-g8sm.onrender.com/api/register', {
                 username: formData.username,
                 email: formData.email,
                 password: formData.password

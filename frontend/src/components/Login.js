@@ -14,7 +14,7 @@ const Login = () => {
         e.preventDefault();
         setIsLoading(true);
         try {
-            const response = await axios.post('http://localhost:5000/api/login', credentials);
+            const response = await axios.post('https://workwise-task-g8sm.onrender.com/api/login', credentials);
             login(response.data.token, response.data.user);
             navigate('/booking');
         } catch (error) {

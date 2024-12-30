@@ -18,7 +18,7 @@ const SeatBooking = () => {
 
     const fetchSeats = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/seats', {
+            const response = await axios.get('https://workwise-task-g8sm.onrender.com/api/seats', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setSeats(response.data);
@@ -29,7 +29,7 @@ const SeatBooking = () => {
 
     const fetchBookings = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/bookings', {
+            const response = await axios.get('https://workwise-task-g8sm.onrender.com/api/bookings', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setBookings(response.data);
@@ -84,7 +84,7 @@ const SeatBooking = () => {
         const selectedSeatIds = seatsToSelect.map(seat => seat.id);
 
         try {
-            await axios.post('http://localhost:5000/api/bookings', 
+            await axios.post('https://workwise-task-g8sm.onrender.com/api/bookings', 
                 { seatIds: selectedSeatIds },
                 { headers: { Authorization: `Bearer ${token}` }}
             );
@@ -98,7 +98,7 @@ const SeatBooking = () => {
 
     const handleCancelBooking = async (bookingId) => {
         try {
-            await axios.delete(`http://localhost:5000/api/bookings/${bookingId}`, {
+            await axios.delete(`https://workwise-task-g8sm.onrender.com/api/bookings/${bookingId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             fetchSeats();
